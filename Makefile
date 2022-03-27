@@ -1,6 +1,9 @@
 SRCS := $(wildcard *.c)
 OBJS := $(SRCS:.c=.o)
-CFLAGS := -Wall -O2 -ffreestanding -nostdinc -nostdlib -nostartfiles
+CFLAGS = -mcpu=cortex-a53 \
+	-fno-common -ffreestanding -O0 \
+	-Wall -Werror \
+	-Wl,-Tlinker.ld -nostartfiles
 CROSS := aarch64-linux-gnu-
 CC := gcc
 
