@@ -29,4 +29,12 @@
 #define AUX_MU_STAT_REG ((__REG)(AUX + 0x64))
 #define AUX_MU_BAUD_REG ((__REG)(AUX + 0x68))
 
+#define MBOX        (MM + 0xb880)
+#define MBOX_READ   ((__REG)(MBOX + 0x00))
+#define MBOX_POLL   ((__REG)(MBOX + 0x10))
+#define MBOX_SENDER ((__REG)(MBOX + 0x14))
+#define MBOX_STATUS ((__REG)(MBOX + 0x18))
+#define MBOX_CONFIG ((__REG)(MBOX + 0x1c))
+#define MBOX_WRITE  ((__REG)(MBOX + 0x20))
+
 #endif /* __REG_H */

@@ -1,4 +1,5 @@
 #include "uart.h"
+#include "mbox.h"
 #include "util.h"
 #include "reset.h"
 #include <stdint.h>
@@ -53,6 +54,31 @@ int printu(uint32_t u)
     for (; u; --i, u /= 10)
         buf[i] = u % 10 + '0';
     int ret = 0xfe - i;
+    for (; i < 0xff; ++i)
+        uart_write_byte(buf[i]);
+    return ret;
+}
+
+int printx(uint32_t x)
+{
+    if (!x)
+    {
+        uart_write_byte('0');
+        return 1;
+    }
+    int i = 0xfe;
+    char c;
+    for (; x; --i, x /= 0x10)
+    {
+        c = x & 0xf;
+        if (c < 10)
+            buf[i] = c + '0';
+        else
+            buf[i] = c - 0xa + 'a';
+    }
+    int ret = 0xfe - i;
+    uart_write_byte('0');
+    uart_write_byte('x');
     for (; i < 0xff; ++i)
         uart_write_byte(buf[i]);
     return ret;
@@ -129,7 +155,32 @@ void shell()
     }
 }
 
+#define GET_BOARD_REVISION  0x00010002
+#define REQUEST_CODE        0x00000000
+#define REQUEST_SUCCEED     0x80000000
+#define REQUEST_FAILED      0x80000001
+#define TAG_REQUEST_CODE    0x00000000
+#define END_TAG             0x00000000
+
+void get_board_revision()
+{
+    mbox[0] = 7 * 4; // buffer size in bytes
+    mbox[1] = REQUEST_CODE;
+    // tags begin
+    mbox[2] = GET_BOARD_REVISION; // tag identifier
+    mbox[3] = 4; // maximum of request and response value buffer's length.
+    mbox[4] = TAG_REQUEST_CODE;
+    mbox[5] = 0; // value buffer
+    // tags end
+    mbox[6] = END_TAG;
+
+    mbox_call(MBOX_CH_PROP); // message passing procedure call, you should implement it following the 6 steps provided above.
+
+    printx(mbox[5]); // it should be 0xa020d3 for rpi3 b+
+}
+
 void main()
 {
+    get_board_revision();
     shell();
 }

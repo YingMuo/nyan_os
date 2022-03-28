@@ -28,12 +28,12 @@ void mini_uart_init()
 
 char uart_read_byte()
 {
-    while (!(*AUX_MU_LSR_REG & LSR_DATA_READY)) {asm("nop");}
+    while (!(*AUX_MU_LSR_REG & LSR_DATA_READY));
     return *AUX_MU_IO_REG & 0xff;
 }
 
 void uart_write_byte(char c)
 {
-    while (!(*AUX_MU_LSR_REG & LSR_TRANSMITTER_EMPTY)) {asm("nop");}
+    while (!(*AUX_MU_LSR_REG & LSR_TRANSMITTER_EMPTY));
     *(char *)AUX_MU_IO_REG = c;
 }
