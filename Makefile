@@ -1,5 +1,6 @@
 SRCS := $(wildcard *.c)
-OBJS := $(SRCS:.c=.o)
+ASMS := $(wildcard *.S)
+OBJS := $(SRCS:%.c=%.o) $(ASMS:%.S=%.o)
 CFLAGS = -mcpu=cortex-a53 \
 	-fno-common -ffreestanding -O0 \
 	-Wall -Werror \
@@ -9,14 +10,14 @@ CC := gcc
 
 all: kernel8.img
 
-start.o: start.S
-	$(CROSS)$(CC) $(CFLAGS) -c start.S -o start.o
+%.o: %.S
+	$(CROSS)$(CC) $(CFLAGS) -c $< -o $@
 
 %.o: %.c
 	$(CROSS)$(CC) $(CFLAGS) -c $< -o $@
 
-kernel8.img: start.o $(OBJS)
-	$(CROSS)ld -nostdlib -nostartfiles start.o $(OBJS) -T linker.ld -o kernel8.elf
+kernel8.img: $(OBJS)
+	$(CROSS)ld -nostdlib -nostartfiles $(OBJS) -T linker.ld -o kernel8.elf
 	$(CROSS)objcopy -O binary kernel8.elf kernel8.img
 
 clean:

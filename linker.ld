@@ -5,6 +5,7 @@ SECTIONS
 	_stext = .;
 	.text : 
 	{
+		*(.text.start)
 		*(.text)
 		*(.rodata)
 	}
