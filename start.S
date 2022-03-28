@@ -13,12 +13,12 @@ _start:
     ldr x0, = _stack_top
     mov sp, x0
 
-    ldr x1, = bss_begin
+    ldr x1, = _sbss
     ldr w2, = bss_size
 3:
     cbz w2, 4f
     str xzr, [x1], #8
-    add w2, w2, #1
+    sub w2, w2, #1
     cbnz w2, 3b
 
 4:

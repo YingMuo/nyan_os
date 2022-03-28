@@ -1,14 +1,27 @@
 SECTIONS
 {
     . = 0x80000;
-	.text : { *(.text) }
-	.rodata : { *(.rodata) }
+
+	_stext = .;
+	.text : 
+	{
+		*(.text)
+		*(.rodata)
+	}
+	. = ALIGN(0x1000);
+	_etext = .;
+
+	_sdata = .;
 	.data : { *(.data) }
-	. = ALIGN(0x8);
-	bss_begin = .;
+	. = ALIGN(0x1000);
+	_edata = .;
+
+	_sbss = .;
 	.bss : { *(.bss*) } 
-	bss_end = .;
-    . = 0x400000;
+	. = ALIGN(0x1000);
+	_ebss = .;
+
+    . = 0x200000;
 	_stack_top = .;
 }
-bss_size = (bss_end - bss_begin) >> 3;
+bss_size = (_ebss - _sbss) >> 3;
