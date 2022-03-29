@@ -1,3 +1,4 @@
+#include "mini_uart.h"
 #include "uart.h"
 #include "mbox.h"
 #include "util.h"
@@ -23,15 +24,15 @@ enum CMD
 
 void putc(char c)
 {
-    uart_write_byte(c);
+    uart0_send_byte(c);
 }
 
 int puts(const char *s)
 {
     int i = 0;
     for (; s[i] != '\0'; ++i)
-        uart_write_byte(s[i]);
-    uart_write_byte('\n');
+        uart0_send_byte(s[i]);
+    uart0_send_byte('\n');
     return i;
 }
 
@@ -39,7 +40,7 @@ int prints(const char *s)
 {
     int i = 0;
     for (; s[i] != '\0'; ++i)
-        uart_write_byte(s[i]);
+        uart0_send_byte(s[i]);
     return i;
 }
 
@@ -47,7 +48,7 @@ int printu(uint32_t u)
 {
     if (!u)
     {
-        uart_write_byte('0');
+        uart0_send_byte('0');
         return 1;
     }
     int i = 0xfe;
@@ -55,7 +56,7 @@ int printu(uint32_t u)
         buf[i] = u % 10 + '0';
     int ret = 0xfe - i;
     for (; i < 0xff; ++i)
-        uart_write_byte(buf[i]);
+        uart0_send_byte(buf[i]);
     return ret;
 }
 
@@ -63,7 +64,7 @@ int printx(uint32_t x)
 {
     if (!x)
     {
-        uart_write_byte('0');
+        uart0_send_byte('0');
         return 1;
     }
     int i = 0xfe;
@@ -77,10 +78,10 @@ int printx(uint32_t x)
             buf[i] = c - 0xa + 'a';
     }
     int ret = 0xfe - i;
-    uart_write_byte('0');
-    uart_write_byte('x');
+    uart0_send_byte('0');
+    uart0_send_byte('x');
     for (; i < 0xff; ++i)
-        uart_write_byte(buf[i]);
+        uart0_send_byte(buf[i]);
     return ret;
 }
 
@@ -90,11 +91,11 @@ int gets(char *s)
     int i = 0;
     for (;c != '\r'; ++i)
     {
-        c = uart_read_byte();
-        uart_write_byte(c);
+        c = uart0_recv_byte();
+        uart0_send_byte(c);
         s[i] = c;
     }
-    uart_write_byte('\n');
+    uart0_send_byte('\n');
     s[i - 1] = '\0';
     return i;
 }
@@ -181,6 +182,7 @@ void get_board_revision()
 
 void main()
 {
+    uart0_init();
     get_board_revision();
     shell();
 }

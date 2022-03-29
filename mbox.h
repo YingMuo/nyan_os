@@ -19,6 +19,7 @@ extern volatile uint32_t mbox[36];
 #define MBOX_CH_PROP    8
 
 #define MBOX_TAG_GETSERIAL  0x10004
+#define MBOX_TAG_SETCLKRATE  0x10004
 #define MBOX_TAG_LAST       0
 
 int mbox_call(char c);
