@@ -1,4 +1,4 @@
-.section ".text.start"
+.section ".text.kernel"
 
 // let core with cpuid != 0 enter busy loop
 _start:

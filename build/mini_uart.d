@@ -1,3 +1,3 @@
-build/mini_uart.o: src/mini_uart.c include/reg.h
+build/mini_uart.o: lib/mini_uart.c include/reg.h
 
 include/reg.h:

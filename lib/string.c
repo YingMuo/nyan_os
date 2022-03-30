@@ -40,6 +40,23 @@ int printu(uint32_t u)
     return ret;
 }
 
+int printlu(uint64_t lu)
+{
+    char buf[0x100];
+    if (!lu)
+    {
+        uart0_send_byte('0');
+        return 1;
+    }
+    int i = 0xfe;
+    for (; lu; --i, lu /= 10)
+        buf[i] = lu % 10 + '0';
+    int ret = 0xfe - i;
+    for (; i < 0xff; ++i)
+        uart0_send_byte(buf[i]);
+    return ret;
+}
+
 int printx(uint32_t x)
 {
     char buf[0x100];

@@ -1,1 +1,1 @@
-build/util.o: src/util.S
+build/util.o: lib/util.S

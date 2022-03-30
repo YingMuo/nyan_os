@@ -7,6 +7,7 @@ void putc(char c);
 int puts(const char *s);
 int prints(const char *s);
 int printu(uint32_t u);
+int printlu(uint32_t lu);
 int printx(uint32_t x);
 int gets(char *s);
 int strcmp(const char *s1, const char *s2);

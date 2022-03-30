@@ -65,9 +65,10 @@ void fb_init()
     }
 }
 
-void fb_draw_pixel(uint32_t x, uint32_t y, uint32_t rgb)
+void fb_draw_pixel(uint32_t x, uint32_t y, char r, char g, char b)
 {
     uint32_t off = y * pitch + x * 4;
+    uint32_t rgb = (uint32_t)r << 16 | (uint32_t)g << 8 | (uint32_t)b;
     *(uint32_t *)(fb + off) = rgb;
 }
 
@@ -78,9 +79,9 @@ void fb_show()
         for (uint32_t y = 0; y < height; ++y)
         {
             if ((x + y) / 16 % 2)
-                fb_draw_pixel(x, y, 0xffffff);
+                fb_draw_pixel(x, y, 0xff, 0xff, 0xff);
             else
-                fb_draw_pixel(x, y, 0x000000);
+                fb_draw_pixel(x, y, 0x00, 0x00, 0x00);
         }
     }
 }

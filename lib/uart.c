@@ -41,8 +41,20 @@ char uart0_recv_byte()
     return *UART0_DR & 0xff; // r/t data
 }
 
+void uart0_recv_nbyte(char *buf, uint64_t size)
+{
+    for (uint64_t i = 0; i < size; ++i)
+        buf[i] = uart0_recv_byte();
+}
+
 void uart0_send_byte(char c)
 {
     while (*UART0_FR & 0x20); // transmit FIFO full
     *UART0_DR = c;
+}
+
+void uart0_send_nbyte(char *buf, uint64_t size)
+{
+    for (uint64_t i = 0; i < size; ++i)
+        uart0_send_byte(buf[i]);
 }
