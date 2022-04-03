@@ -55,7 +55,7 @@ exc_tbl:
 
     b exc_hdlr
     .align 7
-    b exc_hdlr
+    b cur_el_irq
     .align 7
     b exc_hdlr
     .align 7
@@ -64,7 +64,7 @@ exc_tbl:
 
     b exc_hdlr
     .align 7
-    b exc_hdlr
+    b lower_el_irq
     .align 7
     b exc_hdlr
     .align 7
@@ -82,9 +82,25 @@ exc_tbl:
 
 exc_hdlr:
     save_ctxt
-    mrs x0, elr_el2
+    mrs x0, elr_el1
     bl printlx
     mov w0, #0xa
     bl putc 
+    restore_ctxt
+    eret
+
+lower_el_irq:
+    save_ctxt
+    mov x0, 0xfffffff
+    msr cntp_tval_el0, x0
+    bl core_timer_hdlr
+    restore_ctxt
+    eret
+
+cur_el_irq:
+    save_ctxt
+    mov x0, 0xfffffff
+    msr cntp_tval_el0, x0
+    bl core_timer_hdlr
     restore_ctxt
     eret

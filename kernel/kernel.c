@@ -104,6 +104,6 @@ void main()
     // fb_show();
     uart0_init();
     get_board_revision();
-    // brk1();
+    core_timer_enable();
     shell();
 }
