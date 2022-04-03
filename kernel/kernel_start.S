@@ -22,5 +22,9 @@ _start:
     cbnz w2, 3b
 
 4:
+    // load exception table to VBAR_EL2
+    ldr x0, =exc_tbl
+    msr VBAR_EL2, x0
+
     bl main
     b 1b

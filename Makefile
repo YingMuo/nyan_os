@@ -58,7 +58,7 @@ clean:
 	rm $(BUILD_DIR)/kernel8.elf kernel8.img $(BUILD_DIR)/bootloader.elf bootloader.img $(BUILD_DIR)/*.o $(BUILD_DIR)/*.d
 
 run:
-	qemu-system-aarch64 -M raspi3 -kernel bootloader.img -serial pty -s
+	qemu-system-aarch64 -M raspi3 -kernel kernel8.img -serial stdio -s
 
 debug:
-	qemu-system-aarch64 -M raspi3 -kernel bootloader.img -serial pty -s -S
+	qemu-system-aarch64 -M raspi3 -kernel kernel8.img -serial stdio -s -S

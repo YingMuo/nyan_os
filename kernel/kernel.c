@@ -7,13 +7,13 @@
 #include "string.h"
 #include "fb.h"
 
-char buf[0x100];
 const char hello[] = "Hello World!";
 const char * const cmd[] = {
     "help",
     "hello",
     "timestamp",
-    "reboot"
+    "reboot",
+    "exc"
 };
 
 enum CMD
@@ -21,7 +21,8 @@ enum CMD
     HELP = 0,
     HELLO,
     TIMESTAMP,
-    REBOOT
+    REBOOT,
+    EXC
 };
 
 void print_time()
@@ -40,12 +41,13 @@ void print_time()
 
 void shell()
 {
+    char buf[0x100];
     for (;;)
     {
         prints("# ");
         gets(buf);
         int i = 0;
-        for (;i < 4 && strcmp(buf, cmd[i]); ++i);
+        for (;i < sizeof(cmd) / 0x8 && strcmp(buf, cmd[i]); ++i);
         switch (i)
         {
         case HELP:
@@ -61,6 +63,9 @@ void shell()
         case REBOOT:
             reset(10);
             puts("reboot...");
+            break;
+        case EXC:
+            svc1();
             break;
         default:
             puts("Wrong cmd! Please type <help> to get usage.");
@@ -90,13 +95,15 @@ void get_board_revision()
     mbox_call(MBOX_CH_PROP); // message passing procedure call, you should implement it following the 6 steps provided above.
 
     printx(mbox[5]); // it should be 0xa020d3 for rpi3 b+
+    putc('\n');
 }
 
 void main()
 {
-    fb_init();
-    fb_show();
+    // fb_init();
+    // fb_show();
     uart0_init();
     get_board_revision();
+    // brk1();
     shell();
 }

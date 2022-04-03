@@ -83,6 +83,32 @@ int printx(uint32_t x)
     return ret;
 }
 
+int printlx(uint64_t lx)
+{
+    char buf[0x100];
+    if (!lx)
+    {
+        uart0_send_byte('0');
+        return 1;
+    }
+    int i = 0xfe;
+    char c;
+    for (; lx; --i, lx /= 0x10)
+    {
+        c = lx & 0xf;
+        if (c < 10)
+            buf[i] = c + '0';
+        else
+            buf[i] = c - 0xa + 'a';
+    }
+    int ret = 0xfe - i;
+    uart0_send_byte('0');
+    uart0_send_byte('x');
+    for (; i < 0xff; ++i)
+        uart0_send_byte(buf[i]);
+    return ret;
+}
+
 int gets(char *s)
 {
     char c = '\0';
