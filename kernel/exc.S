@@ -91,7 +91,7 @@ exc_hdlr:
 
 lower_el_irq:
     save_ctxt
-    mov x0, 0xfffffff
+    mov x0, 0xfffff
     msr cntp_tval_el0, x0
     bl core_timer_hdlr
     restore_ctxt
@@ -99,7 +99,7 @@ lower_el_irq:
 
 cur_el_irq:
     save_ctxt
-    mov x0, 0xfffffff
+    mov x0, 0xfffff
     msr cntp_tval_el0, x0
     bl core_timer_hdlr
     restore_ctxt

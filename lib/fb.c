@@ -1,8 +1,8 @@
 #include "mbox.h"
 #include "string.h"
+#include "fb.h"
 
-uint32_t width, height, pitch, isrgb;
-char *fb;
+struct fb_struct fb;
 
 void fb_init()
 {
@@ -12,14 +12,14 @@ void fb_init()
     mbox[2] = 0x48003; //set phy w/h
     mbox[3] = 8;
     mbox[4] = 8;
-    mbox[5] = 1024; // width
-    mbox[6] = 768; // height
+    mbox[5] = 640; // width
+    mbox[6] = 480; // height
 
     mbox[7] = 0x48004; //set virt w/h
     mbox[8] = 8;
     mbox[9] = 8;
-    mbox[10] = 1024; // virtual_width
-    mbox[11] = 768; // virtual_height
+    mbox[10] = 640; // virtual_width
+    mbox[11] = 480 * 2; // virtual_height
 
     mbox[12] = 0x48009; //set virt offset
     mbox[13] = 8;
@@ -53,11 +53,42 @@ void fb_init()
     if (mbox_call(MBOX_CH_PROP) && mbox[20] == 32)
     {
         mbox[28] &= 0x3FFFFFFF; //convert GPU address to ARM address
-        width = mbox[5]; //get actual physical width
-        height = mbox[6]; //get actual physical height
-        pitch = mbox[33]; //get number of bytes per line
-        isrgb = mbox[24]; //get the actual channel order
-        fb = (void *)((uint64_t)mbox[28]);
+        fb.width = mbox[5]; //get actual physical width
+        fb.height = mbox[6]; //get actual physical height
+        fb.pitch = mbox[33]; //get number of bytes per line
+        fb.isrgb = mbox[24]; //get the actual channel order
+        fb.next = 1;
+        fb.ptr[0] = (void *)((uint64_t)mbox[28]);
+        fb.ptr[1] = (void *)((uint64_t)mbox[28] + fb.height * fb.pitch);
+        fb.size = mbox[29];
+
+        prints("fb width: ");
+        printu(fb.width);
+        putc('\n');
+
+        prints("fb height: ");
+        printu(fb.height);
+        putc('\n');
+
+        prints("fb pitch: ");
+        printu(fb.pitch);
+        putc('\n');
+
+        prints("fb isrgb: ");
+        printu(fb.isrgb);
+        putc('\n');
+
+        prints("fb ptr[0]: ");
+        printlx((uint64_t)fb.ptr[0]);
+        putc('\n');
+
+        prints("fb ptr[1]: ");
+        printlx((uint64_t)fb.ptr[1]);
+        putc('\n');
+
+        prints("fb size: ");
+        printx(fb.size);
+        putc('\n');
     }
     else
     {
@@ -65,23 +96,51 @@ void fb_init()
     }
 }
 
-void fb_draw_pixel(uint32_t x, uint32_t y, char r, char g, char b)
+void fb_flip()
 {
-    uint32_t off = y * pitch + x * 4;
-    uint32_t rgb = (uint32_t)r << 16 | (uint32_t)g << 8 | (uint32_t)b;
-    *(uint32_t *)(fb + off) = rgb;
+    if (fb.next == 1)
+    {
+        mbox[0] = 8 * 4;
+        mbox[1] = MBOX_REQUEST;
+
+        mbox[2] = 0x48009; //set virt offset
+        mbox[3] = 8;
+        mbox[4] = 8;
+        mbox[5] = 0; // x
+        mbox[6] = fb.height; // y
+
+        mbox[7] = MBOX_TAG_LAST;
+
+        fb.next = 0;
+    }
+    else
+    {
+        mbox[0] = 8 * 4;
+        mbox[1] = MBOX_REQUEST;
+
+        mbox[2] = 0x48009; //set virt offset
+        mbox[3] = 8;
+        mbox[4] = 8;
+        mbox[5] = 0; // x
+        mbox[6] = 0; // y
+
+        mbox[7] = MBOX_TAG_LAST;
+
+        fb.next = 1;
+    }
 }
 
-void fb_show()
+void fb_clear()
 {
-    for (uint32_t x = 0; x < width; ++x)
-    {
-        for (uint32_t y = 0; y < height; ++y)
-        {
-            if ((x + y) / 16 % 2)
-                fb_draw_pixel(x, y, 0xff, 0xff, 0xff);
-            else
-                fb_draw_pixel(x, y, 0x00, 0x00, 0x00);
-        }
-    }
+    for (int i = 0; i < fb.height * fb.pitch; ++i)
+        fb.ptr[fb.next][i] = 0;
+}
+
+void fb_draw_pixel(uint32_t x, uint32_t y, char r, char g, char b)
+{
+    if (x >= fb.width || y >= fb.height)
+        return;
+    uint32_t off = y * fb.pitch + x * 4;
+    uint32_t rgb = (uint32_t)r << 16 | (uint32_t)g << 8 | (uint32_t)b;
+    *(uint32_t *)(fb.ptr[fb.next] + off) = rgb;
 }

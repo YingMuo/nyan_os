@@ -100,10 +100,8 @@ void get_board_revision()
 
 void main()
 {
-    // fb_init();
-    // fb_show();
+    fb_init();
     uart0_init();
-    get_board_revision();
     core_timer_enable();
     shell();
 }

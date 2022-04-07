@@ -1,12 +1,32 @@
 #include "string.h"
+#include "fb.h"
 #include <stdint.h>
 
-uint32_t ctcnt = 0;
+uint32_t jeffies = 0;
+
+void draw()
+{
+    for (int y = 0; y < 480; ++y)
+    {
+        for (int x = 0; x < 640; ++x)
+        {
+            if ((x + y + jeffies*4) / 16 % 2)
+                fb_draw_pixel(x, y, 0xff, 0xff, 0xff);
+            else
+                fb_draw_pixel(x, y, 0x00, 0x00, 0x00);
+        }
+    }
+}
 
 void core_timer_hdlr()
 {
-    ctcnt++;
-    prints("core timer jeffies: ");
-    printu(ctcnt);
-    putc('\n');
+    jeffies++;
+    if (jeffies % 5 == 0)
+    {
+        fb_flip();
+    }
+    if (jeffies % 5 == 1)
+    {
+        draw();
+    }
 }
