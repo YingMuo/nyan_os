@@ -1,34 +1,27 @@
-#include "peripheral/fb.h"
 #include "peripheral/reg.h"
 #include "sysreg.h"
 #include "timer.h"
+#include "sched.h"
 #include "types.h"
 
 uint64_t jeffies;
 
-void draw()
+uint64_t get_jeffies()
 {
-    for (int y = 0; y < 480; ++y)
-    {
-        for (int x = 0; x < 640; ++x)
-        {
-            if ((x + y + jeffies*4) / 16 % 2)
-                fb_draw_pixel(x, y, 0xff, 0xff, 0xff);
-            else
-                fb_draw_pixel(x, y, 0x00, 0x00, 0x00);
-        }
-    }
+    return jeffies;
+}
+
+void inc_jeffies()
+{
+    ++jeffies;
 }
 
 void core_timer_hdlr()
 {
-    jeffies++;
+    inc_jeffies();
     sysreg_write(cntp_tval_el0, 0xfffff);
-    if (jeffies % 3 == 0)
-    {
-        fb_flip();
-        draw();
-    }
+
+    sched();
 }
 
 void core_timer_enable()
