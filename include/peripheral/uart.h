@@ -1,7 +1,7 @@
 #ifndef _UART_H
 #define _UART_H
 
-#include <stdint.h>
+#include "types.h"
 
 void uart0_init();
 char uart0_recv_byte();

@@ -44,63 +44,56 @@
 .align 11 // vector table should be aligned to 0x800
 .global exc_tbl
 exc_tbl:
-    b exc_hdlr // branch to a handler function.
+    b others // branch to a handler function.
     .align 7 // entry size is 0x80, .align will pad 0
-    b exc_hdlr
+    b others
     .align 7
-    b exc_hdlr
+    b others
     .align 7
-    b exc_hdlr
+    b others
     .align 7
 
-    b exc_hdlr
+    b others
     .align 7
     b cur_el_irq
     .align 7
-    b exc_hdlr
+    b others
     .align 7
-    b exc_hdlr
+    b others
     .align 7
 
-    b exc_hdlr
+    b others
     .align 7
     b lower_el_irq
     .align 7
-    b exc_hdlr
+    b others
     .align 7
-    b exc_hdlr
-    .align 7
-
-    b exc_hdlr
-    .align 7
-    b exc_hdlr
-    .align 7
-    b exc_hdlr
-    .align 7
-    b exc_hdlr
+    b others
     .align 7
 
-exc_hdlr:
+    b others
+    .align 7
+    b others
+    .align 7
+    b others
+    .align 7
+    b others
+    .align 7
+
+others:
     save_ctxt
-    mrs x0, elr_el1
-    bl uart0_printlx
-    mov w0, #0xa
-    bl uart0_putc 
+    bl exc_hdlr
     restore_ctxt
     eret
 
 lower_el_irq:
     save_ctxt
-    mov x0, 0xfffff
-    msr cntp_tval_el0, x0
     bl core_timer_hdlr
     restore_ctxt
     eret
 
 cur_el_irq:
     save_ctxt
-    mov x0, 0xfffff
-    msr cntp_tval_el0, x0
     bl core_timer_hdlr
     restore_ctxt
     eret

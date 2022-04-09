@@ -1,7 +1,7 @@
 #ifndef _MBOX_H
 #define _MBOX_H
 
-#include <stdint.h>
+#include "types.h"
 
 extern volatile uint32_t mbox[36];
 

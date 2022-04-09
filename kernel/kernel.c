@@ -2,10 +2,11 @@
 #include "peripheral/uart.h"
 #include "peripheral/mbox.h"
 #include "peripheral/fb.h"
-#include "util.h"
 #include "reset.h"
 #include "string.h"
-#include <stdint.h>
+#include "sysreg.h"
+#include "timer.h"
+#include "types.h"
 
 const char hello[] = "Hello World!";
 const char * const cmd[] = {
@@ -28,8 +29,8 @@ enum CMD
 void print_time()
 {
     uart0_putc('[');
-    uint64_t tc = get_tc();
-    uint32_t tf = get_tf();
+    uint64_t tc = sysreg_read(cntpct_el0);
+    uint32_t tf = sysreg_read(cntfrq_el0);
     uint32_t tp = tc / tf;
     uint32_t ts = tc % tf;
     uart0_printu(tp);
@@ -65,7 +66,7 @@ void shell()
             uart0_puts("reboot...");
             break;
         case EXC:
-            svc1();
+            asm ("svc #1");
             break;
         default:
             uart0_puts("Wrong cmd! Please type <help> to get usage.");

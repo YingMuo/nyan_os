@@ -1,7 +1,7 @@
 #include "peripheral/reg.h"
 #include "peripheral/mbox.h"
 
-#include <stdint.h>
+#include "types.h"
 
 void uart0_init()
 {

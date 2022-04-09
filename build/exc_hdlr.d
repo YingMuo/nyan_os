@@ -1,3 +1,6 @@
-build/exc_hdlr.o: kernel/exc_hdlr.c include/peripheral/fb.h
+build/exc_hdlr.o: kernel/exc_hdlr.c include/peripheral/uart.h \
+ include/sysreg.h
 
-include/peripheral/fb.h:
+include/peripheral/uart.h:
+
+include/sysreg.h:

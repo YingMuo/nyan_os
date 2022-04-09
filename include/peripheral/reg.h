@@ -1,7 +1,7 @@
 #ifndef	__REG_H
 #define	__REG_H
 
-#include <stdint.h>
+#include "types.h"
 #define __REG_TYPE volatile uint32_t
 #define __REG __REG_TYPE *
 
@@ -56,5 +56,7 @@
 #define UART0_ITIP   ((__REG)(UART0 + 0x84))
 #define UART0_ITOP   ((__REG)(UART0 + 0x88))
 #define UART0_TDR    ((__REG)(UART0 + 0x8c))
+
+#define CORE0_TIMER_IRQ_CTRL ((__REG)0x40000040)
 
 #endif /* __REG_H */

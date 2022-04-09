@@ -1,7 +1,7 @@
 #ifndef _FB_H
 #define _FB_H
 
-#include "stdint.h"
+#include "types.h"
 
 extern const uint32_t width, height;
 

@@ -1,5 +1,5 @@
 #include "peripheral/reg.h"
-#include <stdint.h>
+#include "types.h"
 
 #define MBOX_EMPTY      0x40000000
 #define MBOX_FULL       0x80000000
