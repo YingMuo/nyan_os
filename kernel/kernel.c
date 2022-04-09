@@ -1,11 +1,11 @@
-#include "mini_uart.h"
-#include "uart.h"
-#include "mbox.h"
+#include "peripheral/mini_uart.h"
+#include "peripheral/uart.h"
+#include "peripheral/mbox.h"
+#include "peripheral/fb.h"
 #include "util.h"
 #include "reset.h"
-#include <stdint.h>
 #include "string.h"
-#include "fb.h"
+#include <stdint.h>
 
 const char hello[] = "Hello World!";
 const char * const cmd[] = {
@@ -27,16 +27,16 @@ enum CMD
 
 void print_time()
 {
-    putc('[');
+    uart0_putc('[');
     uint64_t tc = get_tc();
     uint32_t tf = get_tf();
     uint32_t tp = tc / tf;
     uint32_t ts = tc % tf;
-    printu(tp);
-    putc('.');
-    printu(ts);
-    putc(']');
-    putc('\n');
+    uart0_printu(tp);
+    uart0_putc('.');
+    uart0_printu(ts);
+    uart0_putc(']');
+    uart0_putc('\n');
 }
 
 void shell()
@@ -44,31 +44,31 @@ void shell()
     char buf[0x100];
     for (;;)
     {
-        prints("# ");
-        gets(buf);
+        uart0_prints("# ");
+        uart0_gets(buf);
         int i = 0;
         for (;i < sizeof(cmd) / 0x8 && strcmp(buf, cmd[i]); ++i);
         switch (i)
         {
         case HELP:
-            puts("help : print usage");
-            puts("hello : print Hello World!");
+            uart0_puts("help : print usage");
+            uart0_puts("hello : print Hello World!");
             break;
         case HELLO:
-            puts(hello);
+            uart0_puts(hello);
             break;
         case TIMESTAMP:
             print_time();
             break;
         case REBOOT:
             reset(10);
-            puts("reboot...");
+            uart0_puts("reboot...");
             break;
         case EXC:
             svc1();
             break;
         default:
-            puts("Wrong cmd! Please type <help> to get usage.");
+            uart0_puts("Wrong cmd! Please type <help> to get usage.");
         }
     }
 }
@@ -94,8 +94,8 @@ void get_board_revision()
 
     mbox_call(MBOX_CH_PROP); // message passing procedure call, you should implement it following the 6 steps provided above.
 
-    printx(mbox[5]); // it should be 0xa020d3 for rpi3 b+
-    putc('\n');
+    uart0_printx(mbox[5]); // it should be 0xa020d3 for rpi3 b+
+    uart0_putc('\n');
 }
 
 void main()

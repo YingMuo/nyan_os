@@ -1,4 +1,4 @@
-#include "reg.h"
+#include "peripheral/reg.h"
 
 #define LSR_DATA_READY (1 << 0)
 #define LSR_TRANSMITTER_EMPTY (1 << 5)

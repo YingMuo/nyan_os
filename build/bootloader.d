@@ -1,6 +1,3 @@
-build/bootloader.o: bootloader/bootloader.c include/uart.h \
- include/string.h
+build/bootloader.o: bootloader/bootloader.c include/peripheral/uart.h
 
-include/uart.h:
-
-include/string.h:
+include/peripheral/uart.h:

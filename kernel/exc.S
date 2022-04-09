@@ -83,9 +83,9 @@ exc_tbl:
 exc_hdlr:
     save_ctxt
     mrs x0, elr_el1
-    bl printlx
+    bl uart0_printlx
     mov w0, #0xa
-    bl putc 
+    bl uart0_putc 
     restore_ctxt
     eret
 

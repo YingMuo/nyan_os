@@ -1,7 +1,8 @@
-build/fb.o: lib/fb.c include/mbox.h include/string.h include/fb.h
+build/fb.o: lib/fb.c include/peripheral/mbox.h include/peripheral/uart.h \
+ include/peripheral/fb.h
 
-include/mbox.h:
+include/peripheral/mbox.h:
 
-include/string.h:
+include/peripheral/uart.h:
 
-include/fb.h:
+include/peripheral/fb.h:

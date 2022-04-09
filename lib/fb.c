@@ -1,6 +1,6 @@
-#include "mbox.h"
-#include "string.h"
-#include "fb.h"
+#include "peripheral/mbox.h"
+#include "peripheral/uart.h"
+#include "peripheral/fb.h"
 
 struct fb_struct fb;
 
@@ -62,37 +62,37 @@ void fb_init()
         fb.ptr[1] = (void *)((uint64_t)mbox[28] + fb.height * fb.pitch);
         fb.size = mbox[29];
 
-        prints("fb width: ");
-        printu(fb.width);
-        putc('\n');
+        uart0_prints("fb width: ");
+        uart0_printu(fb.width);
+        uart0_putc('\n');
 
-        prints("fb height: ");
-        printu(fb.height);
-        putc('\n');
+        uart0_prints("fb height: ");
+        uart0_printu(fb.height);
+        uart0_putc('\n');
 
-        prints("fb pitch: ");
-        printu(fb.pitch);
-        putc('\n');
+        uart0_prints("fb pitch: ");
+        uart0_printu(fb.pitch);
+        uart0_putc('\n');
 
-        prints("fb isrgb: ");
-        printu(fb.isrgb);
-        putc('\n');
+        uart0_prints("fb isrgb: ");
+        uart0_printu(fb.isrgb);
+        uart0_putc('\n');
 
-        prints("fb ptr[0]: ");
-        printlx((uint64_t)fb.ptr[0]);
-        putc('\n');
+        uart0_prints("fb ptr[0]: ");
+        uart0_printlx((uint64_t)fb.ptr[0]);
+        uart0_putc('\n');
 
-        prints("fb ptr[1]: ");
-        printlx((uint64_t)fb.ptr[1]);
-        putc('\n');
+        uart0_prints("fb ptr[1]: ");
+        uart0_printlx((uint64_t)fb.ptr[1]);
+        uart0_putc('\n');
 
-        prints("fb size: ");
-        printx(fb.size);
-        putc('\n');
+        uart0_prints("fb size: ");
+        uart0_printx(fb.size);
+        uart0_putc('\n');
     }
     else
     {
-        puts("Unable to set screen resolution to 1024x768x32\n");
+        uart0_puts("Unable to set screen resolution to 1024x768x32\n");
     }
 }
 

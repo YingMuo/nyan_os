@@ -1,4 +1,4 @@
-#include "reg.h"
+#include "peripheral/reg.h"
 #include <stdint.h>
 
 #define MBOX_EMPTY      0x40000000

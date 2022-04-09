@@ -1,3 +1,3 @@
-build/mbox.o: lib/mbox.c include/reg.h
+build/mbox.o: lib/mbox.c include/peripheral/reg.h
 
-include/reg.h:
+include/peripheral/reg.h:

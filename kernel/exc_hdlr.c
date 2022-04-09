@@ -1,8 +1,7 @@
-#include "string.h"
-#include "fb.h"
+#include "peripheral/fb.h"
 #include <stdint.h>
 
-uint32_t jeffies = 0;
+uint64_t jeffies = 0;
 
 void draw()
 {
@@ -21,12 +20,9 @@ void draw()
 void core_timer_hdlr()
 {
     jeffies++;
-    if (jeffies % 5 == 0)
+    if (jeffies % 3 == 0)
     {
         fb_flip();
-    }
-    if (jeffies % 5 == 1)
-    {
         draw();
     }
 }

@@ -1,17 +1,17 @@
-build/kernel.o: kernel/kernel.c include/mini_uart.h include/uart.h \
- include/mbox.h include/util.h include/reset.h include/string.h \
- include/fb.h
+build/kernel.o: kernel/kernel.c include/peripheral/mini_uart.h \
+ include/peripheral/uart.h include/peripheral/mbox.h \
+ include/peripheral/fb.h include/util.h include/reset.h include/string.h
 
-include/mini_uart.h:
+include/peripheral/mini_uart.h:
 
-include/uart.h:
+include/peripheral/uart.h:
 
-include/mbox.h:
+include/peripheral/mbox.h:
+
+include/peripheral/fb.h:
 
 include/util.h:
 
 include/reset.h:
 
 include/string.h:
-
-include/fb.h:
