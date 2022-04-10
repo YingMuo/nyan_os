@@ -1,16 +1,14 @@
 #include "timer.h"
 #include "peripheral/fb.h"
+#include "animation.h"
 
 void draw(uint64_t jeffies)
 {
-    for (int y = 0; y < 480; ++y)
+    for (int y = 0; y < 512; ++y)
     {
-        for (int x = 0; x < 640; ++x)
+        for (int x = 0; x < 512; ++x)
         {
-            if ((x + y + jeffies * 4) / 16 % 2)
-                fb_draw_pixel(x, y, 0xff, 0xff, 0xff);
-            else
-                fb_draw_pixel(x, y, 0x00, 0x00, 0x00);
+            fb_draw_pixel_16(x, y, frames_16[frame_ctr][y / 8][x / 8]);
         }
     }
 }
@@ -22,5 +20,7 @@ void sched()
     {
         fb_flip();
         draw(jeffies);
+        ++frame_ctr;
+        frame_ctr %= 12;
     }
 }

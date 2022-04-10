@@ -2,6 +2,7 @@
 #include "peripheral/uart.h"
 #include "peripheral/mbox.h"
 #include "peripheral/fb.h"
+#include "animation.h"
 #include "reset.h"
 #include "string.h"
 #include "sysreg.h"
@@ -101,7 +102,8 @@ void get_board_revision()
 
 void main()
 {
-    fb_init();
+    fb_init(512, 512, 16);
+    animation_init_16();
     uart0_init();
     core_timer_enable();
     shell();

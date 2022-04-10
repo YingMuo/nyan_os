@@ -5,16 +5,16 @@
 #define __REG_TYPE volatile uint32_t
 #define __REG __REG_TYPE *
 
-#define MM 0x3f000000
+#define MMIO 0x3f000000
 
-#define GPIO        (MM + 0x200000)
+#define GPIO        (MMIO + 0x200000)
 #define GPFSEL1     ((__REG)(GPIO + 0x04))
 #define GPSET1      ((__REG)(GPIO + 0x1c))
 #define GPCLR1      ((__REG)(GPIO + 0x28))
 #define GPPUD       ((__REG)(GPIO + 0x94))
 #define GPPUDCLK0   ((__REG)(GPIO + 0x98))
 
-#define AUX             (MM + 0x215000)
+#define AUX             (MMIO + 0x215000)
 #define AUX_IRQ         ((__REG)(AUX + 0x00))
 #define AUX_ENABLES     ((__REG)(AUX + 0x04))
 #define AUX_MU_IO_REG   ((__REG)(AUX + 0x40))
@@ -29,7 +29,7 @@
 #define AUX_MU_STAT_REG ((__REG)(AUX + 0x64))
 #define AUX_MU_BAUD_REG ((__REG)(AUX + 0x68))
 
-#define MBOX        (MM + 0xb880)
+#define MBOX        (MMIO + 0xb880)
 #define MBOX_READ   ((__REG)(MBOX + 0x00))
 #define MBOX_POLL   ((__REG)(MBOX + 0x10))
 #define MBOX_SENDER ((__REG)(MBOX + 0x14))
@@ -37,7 +37,7 @@
 #define MBOX_CONFIG ((__REG)(MBOX + 0x1c))
 #define MBOX_WRITE  ((__REG)(MBOX + 0x20))
 
-#define UART0        (MM + 0x201000)
+#define UART0        (MMIO + 0x201000)
 #define UART0_DR     ((__REG)(UART0 + 0x00))
 #define UART0_RSRECR ((__REG)(UART0 + 0x04))
 #define UART0_FR     ((__REG)(UART0 + 0x18))
